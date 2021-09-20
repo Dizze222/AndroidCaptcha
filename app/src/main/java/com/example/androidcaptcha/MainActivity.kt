@@ -10,6 +10,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val keysToCaptcha = listOf("op3","iu3","dek3","wde2","we1","wf3","ef0","ffe4","f43e")
         val arrayPicture = listOf(R.drawable.one,R.drawable.two,R.drawable.three,R.drawable.four,
             R.drawable.five,R.drawable.six,R.drawable.seven,R.drawable.eight,R.drawable.nine)
         val randomImageView = findViewById<ImageView>(R.id.randomImageView)
@@ -18,18 +19,19 @@ class MainActivity : AppCompatActivity() {
         val textViewResult = findViewById<TextView>(R.id.textViewResult)
         val random = arrayPicture.random()
         randomImageView.setImageResource(random)
-        var count = 0
+        var arrayElementToPicture = 0
         for (i in arrayPicture){
-            if (random == arrayPicture[count]){
-                Log.d("TAG", count.toString())
+            if (random == arrayPicture[arrayElementToPicture]){
+                Log.i("TAGi",arrayElementToPicture.toString())
             }else{
-                count+= 1
+                arrayElementToPicture += 1
             }
         }
-        inputCaptcha.inputType = InputType.TYPE_CLASS_NUMBER
+
+
         buttonCheck.setOnClickListener {
-            val inputUserInteger = inputCaptcha.text.toString().toInt()
-            if(count == (inputUserInteger - 1)){
+            val inputUserInteger = inputCaptcha.text.toString()
+            if (inputUserInteger.equals(keysToCaptcha[arrayElementToPicture])){
                 Toast.makeText(this,"Успех", Toast.LENGTH_LONG).show()
                 textViewResult.text = "Вы успешно прошли капчу"
             }else{
