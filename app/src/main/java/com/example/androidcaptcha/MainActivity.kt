@@ -2,41 +2,48 @@ package com.example.androidcaptcha
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.InputType
 import android.util.Log
 import android.widget.*
+import com.example.androidcaptcha.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        val keysToCaptcha = listOf("op3","iu3","dek3","wde2","we1","wf3","ef0","ffe4","f43e")
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        val keysToCaptcha = listOf("o","2","q","s","9")
         val arrayPicture = listOf(R.drawable.one,R.drawable.two,R.drawable.three,R.drawable.four,
-            R.drawable.five,R.drawable.six,R.drawable.seven,R.drawable.eight,R.drawable.nine)
-        val randomImageView = findViewById<ImageView>(R.id.randomImageView)
-        val inputCaptcha = findViewById<EditText>(R.id.inputCaptcha)
-        val buttonCheck = findViewById<Button>(R.id.buttonCheck)
-        val textViewResult = findViewById<TextView>(R.id.textViewResult)
-        val random = arrayPicture.random()
-        randomImageView.setImageResource(random)
-        var arrayElementToPicture = 0
+            R.drawable.five)
+        var testCount = -1
+        val indexMutableList = mutableListOf<Int>()
         for (i in arrayPicture){
-            if (random == arrayPicture[arrayElementToPicture]){
-                Log.i("TAGi",arrayElementToPicture.toString())
-            }else{
-                arrayElementToPicture += 1
-            }
+            testCount++
+            indexMutableList.add(testCount)
+        }
+        indexMutableList.shuffle()
+            binding.randomImageViewOne.setImageResource(arrayPicture[indexMutableList[0]])
+            binding.randomImageViewTwo.setImageResource(arrayPicture[indexMutableList[1]])
+            binding.randomImageViewThree.setImageResource(arrayPicture[indexMutableList[2]])
+        val arrayImageView = arrayOf(binding.randomImageViewOne,binding.randomImageViewTwo,binding.randomImageViewThree)
+
+
+
+        binding.buttonCheck.setOnClickListener {
+
+            val inputUserIntegerOrString = binding.inputCaptcha.text.toString()
+
+            val chekIsValidCaptcha = keysToCaptcha[indexMutableList[0]] + keysToCaptcha[indexMutableList[1]] + keysToCaptcha[indexMutableList[2]]
+            if (inputUserIntegerOrString.equals(chekIsValidCaptcha))
+                Toast.makeText(this,"Вы успешно прошли капчу",Toast.LENGTH_LONG).show()
+
+            else
+                Toast.makeText(this,"все очень плохо",Toast.LENGTH_LONG).show()
+
         }
 
 
-        buttonCheck.setOnClickListener {
-            val inputUserInteger = inputCaptcha.text.toString()
-            if (inputUserInteger.equals(keysToCaptcha[arrayElementToPicture])){
-                Toast.makeText(this,"Успех", Toast.LENGTH_LONG).show()
-                textViewResult.text = "Вы успешно прошли капчу"
-            }else{
-                Toast.makeText(this,"error", Toast.LENGTH_LONG).show()
-            }
-        }
+
+
     }
 }
